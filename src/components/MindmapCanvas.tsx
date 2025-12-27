@@ -22,11 +22,12 @@ import type { MindMapNodeData } from '../types/mindmap';
 
 const nodeTypes = {
   mindmapNode: CustomNode,
+  default: CustomNode,
 };
 
 interface MindmapCanvasProps {
-  initialNodes: Node<MindMapNodeData>[];
-  initialEdges: Edge[];
+  nodes: Node<MindMapNodeData>[];
+  edges: Edge[];
   onNodesChange: (nodes: Node<MindMapNodeData>[]) => void;
   onEdgesChange: (edges: Edge[]) => void;
   onNodeSelect: (node: Node<MindMapNodeData> | null) => void;
@@ -34,29 +35,17 @@ interface MindmapCanvasProps {
 }
 
 const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
-  initialNodes,
-  initialEdges,
+  nodes,
+  edges,
   onNodesChange,
   onEdgesChange,
   onNodeSelect,
 }) => {
-  const [nodes, setNodes] = useState<Node<MindMapNodeData>[]>(initialNodes);
-  const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [showMiniMap, setShowMiniMap] = useState(false);
-
-  // Sync with parent
-  React.useEffect(() => {
-    setNodes(initialNodes);
-  }, [initialNodes]);
-
-  React.useEffect(() => {
-    setEdges(initialEdges);
-  }, [initialEdges]);
 
   const handleNodesChange = useCallback(
     (changes: NodeChange[]) => {
       const newNodes = applyNodeChanges(changes, nodes);
-      setNodes(newNodes);
       onNodesChange(newNodes);
     },
     [nodes, onNodesChange]
@@ -65,7 +54,6 @@ const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
   const handleEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       const newEdges = applyEdgeChanges(changes, edges);
-      setEdges(newEdges);
       onEdgesChange(newEdges);
     },
     [edges, onEdgesChange]
@@ -74,7 +62,6 @@ const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
   const onConnect = useCallback(
     (connection: Connection) => {
       const newEdges = addEdge(connection, edges);
-      setEdges(newEdges);
       onEdgesChange(newEdges);
     },
     [edges, onEdgesChange]

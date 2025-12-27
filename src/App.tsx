@@ -176,6 +176,7 @@ function App() {
   const handleAddNode = useCallback(() => {
     const newNode: Node<MindMapNodeData> = {
       id: `node-${Date.now()}`,
+      type: 'mindmapNode',
       position: { 
         x: Math.random() * 500 + 100, 
         y: Math.random() * 500 + 100 
@@ -253,8 +254,8 @@ function App() {
       <div className="app-content">
         <div className="canvas-container">
           <MindmapCanvas
-            initialNodes={nodes}
-            initialEdges={edges}
+            nodes={nodes}
+            edges={edges}
             onNodesChange={setNodes}
             onEdgesChange={setEdges}
             onNodeSelect={setSelectedNode}
